@@ -19,11 +19,15 @@ import com.example.dto.AuthRequest;
 import com.example.dto.Product;
 import com.example.entity.UserInfo;
 import com.example.service.ProductService;
+import com.example.service.JwtService;
 
 @RestController
 @RequestMapping("/products")
 public class ProductConroller {
 
+	@Autowired
+    private JwtService jwtService;
+	
 	@Autowired
 	private ProductService service;
 	
@@ -54,7 +58,7 @@ public class ProductConroller {
 	 
 	 @PostMapping("/authenticate")
 	 public String authenticateAndGetToken(@RequestBody AuthRequest authRequest) {
-		 Authentication authentication = authenticationManager.authenticate((new UsernamePasswordAuthenticationToken(authRequest.getUsername(), authRequest.getPassword()))
+		 Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(authRequest.getUsername(), authRequest.getPassword()));
 				 
 				 if (authentication.isAuthenticated()) {
 			            return jwtService.generateToken(authRequest.getUsername());
